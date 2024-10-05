@@ -1,8 +1,9 @@
 import mysql.connector
 import random
+
+from streamlit import cursor
+
 #start of the game user sets username/story/rules explained if its too ng just tell me
-
-
 
 username=input("Hello detective! what would you like to be called?: ")
 print(f"Its an honor to have you {username}! please allow me to explained why we requested your service")
@@ -15,14 +16,19 @@ print(f"Good luck {username}!")
 
 des=input("if you are ready to start click enter!")
 
-# remeber change to match yours when editing the code
+# Variable to track CO2 penalty
+co2_penalty = 0
+
+
+# Database connection function
 def connect_to_database():
     try:
         connection = mysql.connector.connect(
             host="localhost",
             user="root",
             password="126",
-            database="flight_game"
+            database="flight_game",
+            collation="utf8mb4_general_ci"
         )
         return connection
     except mysql.connector.Error as err:
@@ -66,15 +72,25 @@ def fetch_infolugga():
     else:
         print("Connection to database failed.")
 
-# function to start the game you guys can edit if you would like to add or change something
+
+
+#function to start the game you guys can edit if you would like to add or change something
+
 def start():
-    def start_game():
-        if des == "":
-            fetch_infolugga()
-        else:
-            print("Exiting game.")
-
-
+    guesses=3
+    co2_penalty=0
+    if des == "":
+        fetch_infolugga()
+        while guesses > 0:
+            guess_country = input("Where is the luggage? ")
+            if guess_country == : #write the code for the correct country
+               print("You are correct!")
+            else:
+               guesses-=1
+               co2_penalty+=100
+               print(f"You guessed wrong! You have {guesses} guess left")
+    else:
+        print("Exiting game.")
 
 
 start()
