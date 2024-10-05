@@ -68,7 +68,6 @@ def fetch_infolugga():
 
 # function to start the game you guys can edit if you would like to add or change something
 def start():
-    def start_game():
         if des == "":
             fetch_infolugga()
         else:
