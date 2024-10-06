@@ -1,7 +1,7 @@
 import random
 import mysql.connector
 
-# Start of the game - user sets username/story/rules explained
+# Start of the game - user sets their own username/story/rules explained
 username = input("Hello detective! What would you like to be called?: ")
 print(f"It's an honor to have you, {username}! Please allow me to explain why we requested your service.")
 print("Your goal is to retrieve passengers' lost luggage using your detective skills!")
