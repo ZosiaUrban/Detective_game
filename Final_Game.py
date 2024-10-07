@@ -1,7 +1,7 @@
 import random
 import mysql.connector
 
-# Start of the game - user sets their own username/story/rules explained
+# Start of the game - user sets username/story/rules explained
 username = input("Hello detective! What would you like to be called?: ")
 print(f"It's an honor to have you, {username}! Please allow me to explain why we requested your service.")
 print("Your goal is to retrieve passengers' lost luggage using your detective skills!")
@@ -16,7 +16,7 @@ des = input("If you are ready to start, press Enter!")
 # This Variable is to track CO2 penalty
 co2_penalty = 0
 
-# guys remeber to replace this with yours!
+# Database connection  guys remeber to replace this with yours!
 def connect_to_database():
     try:
         connection = mysql.connector.connect(
@@ -32,7 +32,7 @@ def connect_to_database():
         print(f"Error: {err}")
         return None
 
-# Fetch random lug info
+# Fetch random details from pas datab
 def fetch_infolugga():
     connection = connect_to_database()
 
@@ -46,6 +46,7 @@ def fetch_infolugga():
             if total_passengers == 0:
                 print("No passengers found in the database.")
                 return None
+
             random_offset = random.randint(0, total_passengers - 1)
             query = "SELECT first_name, last_name, age, gender, destination_airport, luggage_code FROM passenger LIMIT %s, 1"
             cursor.execute(query, (random_offset,))
@@ -71,7 +72,7 @@ def fetch_infolugga():
         print("Connection to database failed.")
         return None
 
-# Fetch all countries and fatcs fromthe country tabel
+# Fetchs countries from country datab and their facts
 def fetch_countries():
     connection = connect_to_database()
     if not connection:
@@ -86,13 +87,13 @@ def fetch_countries():
 
     return countries
 
-# Select a random country and its facts i had to split it because i messed up the database sorry
+# uses fetched countries randomly, had to split hints sorry
 def select_random_country(countries):
     selected_country = random.choice(countries)
     hints = selected_country['facts'].split('. ')
     return selected_country['name'], hints
 
-def play_country_guessing_game(destination_airport):
+def play_country_guessing_game():
     countries = fetch_countries()
     if not countries:
         print("No countries found. Check database connection or data.")
@@ -104,6 +105,12 @@ def play_country_guessing_game(destination_airport):
 
     for round_number in range(1, rounds + 1):
         print(f"\n--- Round {round_number} ---")
+
+        destination_airport = fetch_infolugga()
+        if not destination_airport:
+            print("Failed to fetch passenger information. Skipping round.")
+            continue
+
         country_name, hints = select_random_country(countries)
 
         print("Hints:")
@@ -141,9 +148,5 @@ def play_country_guessing_game(destination_airport):
     else:
         print("Sorry! You've lost!")
 
-destination_airport = fetch_infolugga()
 
-if destination_airport:
-    play_country_guessing_game(destination_airport)
-else:
-    print("Failed to fetch a passenger. Game cannot proceed.")
+play_country_guessing_game()
